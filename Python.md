@@ -71,9 +71,15 @@
   finally:#无论是否出错都要执行
     print{'free(p)') 
   ```
-1. **assert指定必须满足的条件**
+### assert 断言
+ **assert指定必须满足的条件，上线后通常删除**
    assert a != 0,
    return a / b 
+### raise 引发异常的关键字
++ raise Exception("这是一个异常消息")
+  - raise 后面跟着异常类的名称，通常是内置异常类（例如  Exception，ValueError，TypeError 等）或者你自定义的异常类。
+  - 异常消息是一个字符串，用于描述异常的具体情况。
++ 当爬虫处理数据时，有时需要过滤或丢弃某些数据项。在这种情况下，你可以使用 **raise DropItem()** 来明确指定要丢弃的数据项。**这是scrapy的一个异常类，引发后丢弃当前item**
 ##  **切片：**
 1.  获取元素：alist[::-1]逆序返回元素
 2.  插入元素：
@@ -130,9 +136,10 @@ chr 通过 序号 找到对应的 字符
    + 用import导入即可使用eg：improve bao.mode1(导入bao包中的mode1模块)
    + 包里也有--all--
 3. 安装第三方包
-   + pip install 包名（从国外安装）
+   + pip install 包名（从国外安装）（Windows报错可加--user）
    + pip install -i 网址 包名(从指定网址安装)
     //https://pypi.tuna.tsinghua.edu.cn/simple
+   + 永久配置第三方网址：pip config set global.inndex-url 网址
 ## **类**：
 1. 类的实例化：实例 = 类名()
    + **面向对象的编程：设计类模块实例化后解决问题。**
@@ -192,16 +199,75 @@ chr 通过 序号 找到对应的 字符
    可设置成员 w wb 等属性。
 8.  实例变量（实例属性）：实例变量是属于特定实例的变量，在每个类的实例中具有不同的值。它们在类的方法中通过self关键字进行访问和设置。类变量（类属性）：类变量是类的所有实例共享的变量，它们在所有实例中具有相同的值。类变量在类的内部定义，但在方法之外。通过类名.变量名或实例.变量名
 ###  **成员方法：**
-   + 实例方法： 实例可以用方法，可以通过实例进行调用。它第一个参数必为self，传递变量时无需传递，可以self.x访问类变量。
+   #### 实例方法：
+    实例可以用方法，可以通过实例进行调用。它第一个参数必为self，传递变量时无需传递，可以self.x访问类变量。
      ```
      class student:
       name = None
       def say_hi(self):
         print("hellow I'm {self.name}")
      ```
-   + 类方法：类方法是绑定到类本身的方法，通过@classmethod装饰器进行标识。类方法的第一个参数通常命名为cls，用于引用类本身。类方法可以在不创建类的实例的情况下被调用。
-   + 静态方法：静态方法是属于类的独立方法，不需要访问实例或类。通过@staticmethod装饰器进行标识。静态方法在类的内部定义，但与类和实例没有直接关联。
+   #### 类方法：
+   类方法是绑定到类本身的方法，通过@classmethod装饰器进行标识。类方法的第一个参数通常命名为cls，用于引用类本身。类方法可以在不创建类的实例的情况下被调用。
+   #### 静态方法：
+   静态方法是属于类的独立方法，不需要访问实例或类。通过@staticmethod装饰器进行标识。静态方法在类的内部定义，但与类和实例没有直接关联。
    + dir（）函数可获得一个对象的所有属性和方法。
+### 装饰器(紧跟在函数或方法定义之前)
+  +  @classmethod 装饰器：
+```
+class MyClass:
+    @classmethod
+    def class_method(cls, arg1, arg2, ...):
+        # 类方法体
+@classmethod 装饰器用于定义类方法。
+cls 是类方法的第一个参数，用于引用类本身。
+类方法可以被类直接调用，而不需要创建实例。
+```
+  + @staticmethod 装饰器：
+```
+class MyClass:
+    @staticmethod
+    def static_method(arg1, arg2, ...):
+        # 静态方法体
+@staticmethod 装饰器用于定义静态方法。
+静态方法与类或实例无关，不需要传递额外的参数引用类或实例。
+静态方法可以被类或实例直接调用。
+```
+
+  + @abstractmethod 装饰器：
+```
+from abc import ABC, abstractmethod
+
+class MyAbstractClass(ABC):
+    @abstractmethod
+    def my_abstract_method(self, arg1, arg2, ...):
+        pass
+@abstractmethod 装饰器用于定义抽象方法，要求子类必须实现这些方法。
+抽象方法在基类中没有具体实现，因此需要在子类中提供实现。
+抽象类必须继承自 ABC（Abstract Base Class）类。
+```
+ + @property 装饰器：
+```
+class MyClass:
+    def __init__(self, value):
+        self._value = value
+
+    @property
+    def my_property(self):
+        return self._value
+
+    @my_property.setter
+    def my_property(self, value):
+        self._value = value
+
+    @my_property.deleter
+    def my_property(self):
+        del self._value
+@property 装饰器用于定义属性的 getter 方法。
+@<property_name>.setter 用于定义属性的 setter 方法。
+@<property_name>.deleter 用于定义属性的 deleter 方法。
+这种装饰器允许你在访问属性时执行自定义逻辑，以及在属性赋值或删除时执行相应的逻辑。
+  ```
 
 ## 迭代
 1. map(f(x),迭代对象) //利用f(x)对后面可迭代的对象进行迭代，**特别的f(x)不是整个函数而是函数名不含形参表，返回一个对象，需要按需转换**
@@ -397,7 +463,7 @@ Except<异常名>
    eg：lambda x,y:x+y 自动return：后的语句，但函数体仅可有一句语句。 
 ## yield生成器与next、iter迭代器
 + yield惰性求值，**含yield关键字变成生成器函数，调用它返回一个生成器对象**yield关键字：保留中间算法，下次继续执行
-+ 当调用next方法时，遇到yield就是暂停运行，并且返回yield后面的值
++ 当调用next方法时，遇到yield就是暂停运行，并且返回yield后面的值，next的参数为生成器。
 当再次调用next时，会从刚才暂停的地方继续运行，直到运行下一个yield
 + __ iter__()方法返回迭代器自身，__ next__()方法返回序列中的下一个值。
 ```
