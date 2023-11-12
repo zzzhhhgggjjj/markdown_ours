@@ -56,7 +56,7 @@
 +	Export 变量（改变环境变量，设置的是临时变量）、
 +	修改配置文件/ect/profile
 编辑配置文件/ect/profile，在配置文件中加入配置语句：export PATH=SPATH:/usr/local/mysql/bin在修改完这个文件后使用source命令，可以在不用重启系统的情况下使修改的内容效；或者使用.命令使配置文件生效，等同于source命令。例如：[root@www~]# source /etc/profile [root@www~]#./etc/profile
-+	修改配置文件/root/.bashrc，在当前的Shell下生效
++	修改配置文件/root/.bashrc，在当前的Shell下生效。
 编辑配置文件/root/.bashrc，在配置文件中加入如下配置语句，修改环境变量：
 export PATH=SPATH:/usr/local/mysql/bin
 或者在配置文件/root.bashrc中加入如下配置语句，使别名对当前的Shell生效：
